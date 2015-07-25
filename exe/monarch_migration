@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "monarch_migration"
+
+MonarchMigration::CLI.start
