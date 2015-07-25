@@ -1,6 +1,6 @@
 # MonarchMigration
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/monarch_migration`. To experiment with that code, run `bin/console` for an interactive prompt.
+Generate migration file for Monarch
 
 ## Installation
 
@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-### Add column in table
+### Add column in the table
 
 ex. add age and device column in User table.
 
@@ -28,7 +28,7 @@ ex. add age and device column in User table.
 bundle exec monarch_migration generate addColumnUser age:int device:int
 ```
 
-### Remove column in table
+### Remove column in the table
 
 ex. remove age and device column in User table.
 
