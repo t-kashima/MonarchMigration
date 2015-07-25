@@ -4,7 +4,7 @@ require "thor"
 require "time"
 require "json"
 
-# ref: http://stackoverflow.com/questions/1509915/converting-camel-case-to-underscore-case-in-ruby
+# Convert camel case into snake case
 class String
   def snakecase
     self.gsub(/::/, '/').
@@ -17,46 +17,44 @@ end
 
 module MonarchMigration
   class CLI < Thor
-    desc "generate action_and_class_name column_list", "generate migration file."
-    def generate(action_and_class_name, *column_list)
+    desc "generate actionClassName column...", "generate migration file."
+    def generate(action_and_class_name, *columns)
       unixtime = Time.now.to_i
       filename = "#{unixtime}_#{action_and_class_name.snakecase}.json"
-      match_list = action_and_class_name.match(%r{(.+?)Column(.+)})
-      action = match_list[1]
-      class_name = match_list[2]
-      # puts "action: #{action}"
-      # puts "class name: #{class_name}"
-      # puts "filename: #{filename}"
-      # puts "column: #{column_list}"
 
-      if action == "add" then
-        up_list = get_add_column_up_list(class_name, column_list)
-      elsif action == "remove" then
-        up_list = get_remove_column_up_list(class_name, column_list)
+      matches = action_and_class_name.match(%r{(.+?)Column(.+)})
+      action = matches[1]
+      class_name = matches[2]
+
+      case action
+      when "add" then
+        up = get_up_in_add_column(class_name, columns)
+      when "remove" then
+        up = get_up_in_remove_column(class_name, columns)
       end
 
       json_object = {}
-      json_object["up"] = up_list
+      json_object["up"] = up
       json_generate(filename, json_object)
     end
 
     private
-    def get_add_column_up_list(class_name, column_list)
-      up_list = []
-      column_list.each{|column|
-        up = "addcolumn #{class_name} #{column}"
-        up_list.push(up)
+    def get_up_in_add_column(class_name, columns)
+      up = []
+      columns.each{|column|
+        u = "addcolumn #{class_name} #{column}"
+        up.push(u)
       }
-      return up_list
+      return up
     end
 
-    def get_remove_column_up_list(class_name, column_list)
-      up_list = []
-      column_list.each{|column|
-        up = "removecolumn #{class_name} #{column}"
-        up_list.push(up)
+    def get_up_in_remove_column(class_name, columns)
+      up = []
+      columns.each{|column|
+        u = "removecolumn #{class_name} #{column}"
+        up.push(u)
       }
-      return up_list
+      return up
     end
 
     def json_generate(filename, object)
