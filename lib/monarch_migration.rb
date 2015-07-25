@@ -24,14 +24,14 @@ module MonarchMigration
       match_list = action_and_class_name.match(%r{(.+?)Column(.+)})
       action = match_list[1]
       class_name = match_list[2]
-      puts "action: #{action}"
-      puts "class name: #{class_name}"
-      puts "filename: #{filename}"
-      puts "column: #{column_list}"
+      # puts "action: #{action}"
+      # puts "class name: #{class_name}"
+      # puts "filename: #{filename}"
+      # puts "column: #{column_list}"
 
       if action == "add" then
         up_list = get_add_column_up_list(class_name, column_list)
-      elsif action == "remove"
+      elsif action == "remove" then
         up_list = get_remove_column_up_list(class_name, column_list)
       end
 
